@@ -44,6 +44,12 @@ class TreePickerHelper extends \Backend
             $showFields['titleField'] = $strTitleField;
         }
 
+         // NL -- FIX FOR tl_news support
+        if(empty($showFields)) {
+            $showFields['titleField'] = 'headline';
+        }
+
+
         foreach ($showFields as $k=>$v)
         {
             // Decrypt the value

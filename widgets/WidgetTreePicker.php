@@ -152,7 +152,11 @@ class WidgetTreePicker extends \Widget
 
         if (!empty($this->varValue))
         {
-            $objItems = $this->Database->execute("SELECT * FROM " . $this->foreignTable . " WHERE id IN (" . implode(',', array_map('intval', (array) $this->varValue)) . ") ORDER BY sorting");
+            $orderBy = 'sorting';
+            if($this->foreignTable === 'tl_news') {
+                $orderBy = 'tstamp DESC';
+            }
+            $objItems = $this->Database->execute("SELECT * FROM " . $this->foreignTable . " WHERE id IN (" . implode(',', array_map('intval', (array) $this->varValue)) . ") ORDER BY " . $orderBy);
 
             if ($objItems !== null)
             {

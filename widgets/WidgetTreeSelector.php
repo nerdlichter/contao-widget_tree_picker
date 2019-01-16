@@ -225,7 +225,6 @@ class WidgetTreeSelector extends \Widget
   <li>' . implode(' &gt; </li><li>', $arrLinks) . '</li>
 </ul>';
             }
-
             // Root nodes (breadcrumb menu)
             if (!empty($GLOBALS['TL_DCA'][$this->foreignTable]['list']['sorting']['root']))
             {
@@ -244,8 +243,19 @@ class WidgetTreeSelector extends \Widget
             // Show all items
             else
             {
-                $objItem = $this->Database->prepare("SELECT id FROM " . $this->foreignTable . " WHERE pid=? ORDER BY sorting")
-                                          ->execute(0);
+                $globalParent = 0;
+                $orderBy = 'sorting';
+
+                // NL --- Support for tl_news
+
+                if($this->foreignTable === 'tl_news') {
+                    // Todo: Yes, this works only for this project…
+                    $globalParent = 2;
+                    $orderBy = 'date DESC';
+                }
+
+                $objItem = $this->Database->prepare("SELECT id FROM " . $this->foreignTable . " WHERE pid=? ORDER BY " . $orderBy)
+                                          ->execute($globalParent);
 
                 while ($objItem->next())
                 {
@@ -324,7 +334,11 @@ class WidgetTreeSelector extends \Widget
         $tree = '';
         $level = $level * 20;
 
-        $objItem = $this->Database->prepare("SELECT id FROM " . $this->foreignTable . " WHERE pid=? ORDER BY sorting")
+        $orderBy = 'sorting';
+        if($this->foreignTable === 'tl_news') {
+            $orderBy = 'tstamp DESC';
+        }
+        $objItem = $this->Database->prepare("SELECT id FROM " . $this->foreignTable . " WHERE pid=? ORDER BY " . $orderBy)
                                   ->execute($id);
 
         while ($objItem->next())
@@ -378,7 +392,12 @@ class WidgetTreeSelector extends \Widget
         // Check whether there are child records
         if (!$blnNoRecursion)
         {
-            $objNodes = $this->Database->prepare("SELECT id FROM " . $this->foreignTable . " WHERE pid=? ORDER BY sorting")
+
+            $orderBy = 'sorting';
+            if($this->foreignTable === 'tl_news') {
+                $orderBy = 'tstamp DESC';
+            }
+            $objNodes = $this->Database->prepare("SELECT id FROM " . $this->foreignTable . " WHERE pid=? ORDER BY " . $orderBy)
                                        ->execute($id);
 
             if ($objNodes->numRows)
