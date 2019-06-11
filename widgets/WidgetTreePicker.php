@@ -224,7 +224,7 @@ class WidgetTreePicker extends \Widget
         }
 
         $return .= '</ul>
-    <p><a href="system/modules/widget_tree_picker/public/treepicker.php?do='.\Input::get('do').'&amp;table='.$this->strTable.'&amp;field='.$this->strField.'&amp;act=show&amp;id='.$this->activeRecord->id.'&amp;value='.implode(',', $arrSet).'&amp;rt='.REQUEST_TOKEN.'" class="tl_submit" onclick="Backend.getScrollOffset();TreePicker.openModal({\'width\':765,\'title\':\''.specialchars($GLOBALS['TL_LANG']['MSC']['treepicker']).'\',\'url\':this.href,\'id\':\''.$this->strId.'\'});return false">'.$GLOBALS['TL_LANG']['MSC']['changeSelection'].'</a></p>' . ($blnHasOrder ? '
+    <p><a href="system/modules/widget_tree_picker/public/treepicker.php?do='.\Input::get('do').'&amp;table='.$this->strTable.'&amp;field='.$this->strField.'&amp;act=show&amp;id='.$this->activeRecord->id.'&amp;value='.implode(',', $arrSet).'&amp;rt='.REQUEST_TOKEN.'&amp;pid='.$this->activeRecord->pid.'" class="tl_submit" onclick="Backend.getScrollOffset();TreePicker.openModal({\'width\':765,\'title\':\''.specialchars($GLOBALS['TL_LANG']['MSC']['treepicker']).'\',\'url\':this.href,\'id\':\''.$this->strId.'\'});return false">'.$GLOBALS['TL_LANG']['MSC']['changeSelection'].'</a></p>' . ($blnHasOrder ? '
     <script>Backend.makeMultiSrcSortable("sort_'.$this->strId.'", "ctrl_'.$this->strOrderId.'")</script>' : '') . '
     <script>
         var script = document.createElement("script");

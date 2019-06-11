@@ -251,6 +251,13 @@ class WidgetTreeSelector extends \Widget
                 if($this->foreignTable === 'tl_news') {
                     // Todo: Yes, this works only for this project…
                     $globalParent = 2;
+
+
+                    // Fix for Content-Hub (I really need to find some documentation for the DCA picker tool)
+                    if(isset($_GET['pid'])) {
+                        $globalParent = intval($_GET['pid']);
+                    }
+
                     $orderBy = 'date DESC';
                 }
 
