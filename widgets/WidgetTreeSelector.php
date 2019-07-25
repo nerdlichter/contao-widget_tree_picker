@@ -62,13 +62,21 @@ class WidgetTreeSelector extends \Widget
     }
 
 
+    private function getSessionKeyHash() {
+        $components = [$this->strTable, $this->strField];
+        if(!empty($_GET['pid'])) {
+            $components[] = $_GET['pid'];
+        }
+
+        return substr(md5(implode('', $components)), 0, 8);
+    }
     /**
      * Get the search session key
      * @return string
      */
     public function getSearchSessionKey()
     {
-        return 'treepicker_' . substr(md5($this->strTable . $this->strField), 0, 8) . '_selector_search';
+        return sprintf('treepicker_%s_selector_search', $this->getSessionKeyHash());
     }
 
 
@@ -78,7 +86,7 @@ class WidgetTreeSelector extends \Widget
      */
     public function getPickerSessionKey()
     {
-        return 'tl_treepicker_' . substr(md5($this->strTable . $this->strField), 0, 8);
+        return sprintf('tl_treepicker_%s', $this->getSessionKeyHash());
     }
 
 
@@ -94,12 +102,15 @@ class WidgetTreeSelector extends \Widget
         if (\Input::post('FORM_SUBMIT') == 'item_selector')
         {
             $this->Session->set($this->getSearchSessionKey(), \Input::post('keyword'));
-            $this->reload();
         }
+
 
         $tree = '';
         $this->getPathNodes();
-        $for = $this->Session->get($this->getSearchSessionKey());
+
+        // Das in der Session speichern funktioniert irgendwie nicht mehr(?) aber wird eigentlich auch nicht gebraucht(?)
+        $for = \Input::post('keyword') ?? NULL;
+
         $arrIds = array();
 
         // Search for a specific item
